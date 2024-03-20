@@ -1,0 +1,33 @@
+class Solution {
+public:
+    vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
+        int n=nums1.size();
+        int m=nums2.size();
+        vector <int> right(m,-1);
+        unordered_map<int,int> mp;
+        vector<int> ans;
+        for(int i=0; i<m-1; i++)
+        {
+            int temp=nums2[i];
+            for(int j=i+1; j<m; j++)
+            {
+                if(nums2[j]>temp)
+                {
+                    right[i]=nums2[j];
+                    break;
+                }
+            }
+        }
+        for(int i=0; i<m; i++)
+        {
+            int temp1=nums2[i];
+            int temp2=right[i];
+            mp[temp1]=temp2;
+        }
+        for(int i=0; i<n; i++)
+        {
+            ans.push_back(mp[nums1[i]]);
+        }
+        return ans;
+    }
+};

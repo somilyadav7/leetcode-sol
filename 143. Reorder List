@@ -1,0 +1,44 @@
+class Solution {
+public:
+    ListNode* reverse(ListNode* slow)
+    {
+        ListNode* cur=slow;
+        ListNode* prev=nullptr;
+        ListNode* nxtPointer;
+        while(cur!=nullptr)
+        {
+            nxtPointer=cur->next;
+            cur->next=prev;
+            prev=cur;
+            cur=nxtPointer;
+        }
+        return prev;
+    }
+
+    void merge(ListNode* list1, ListNode* list2)
+    {
+        while(list2) {
+            ListNode  *nextNode = list1->next;
+            list1->next = list2;
+            list1 = list2;
+            list2 = nextNode;
+        }
+    }
+
+    void reorderList(ListNode* head) {
+        if(!head || !head->next)    return;
+        ListNode* fast=head;
+        ListNode* slow=head;
+        ListNode* prev=nullptr;
+        while(fast && fast->next)
+        {
+            prev=slow;
+            fast=fast->next->next;
+            slow=slow->next;
+        }
+        prev->next=nullptr;
+        ListNode* list1=head;
+        ListNode* list2=reverse(slow);
+        merge(list1,list2);
+    }
+};

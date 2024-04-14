@@ -1,0 +1,18 @@
+class Solution {
+public:
+    void help(TreeNode* root, int flag, int &sum)
+    {
+        if(!root)
+            return;
+        if(flag==1 && !root->left && !root->right)
+            sum+=root->val;
+        help(root->left,1,sum);
+        help(root->right,0,sum);
+    }
+
+    int sumOfLeftLeaves(TreeNode* root) {
+        int sum=0;
+        help(root,0,sum);
+        return sum;
+    }
+};

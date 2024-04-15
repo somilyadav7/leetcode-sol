@@ -1,0 +1,50 @@
+//Method 1
+class Solution {
+public:
+    int ans=0;
+
+    void help(TreeNode* root, string s)
+    {
+        if(!root)
+            return ;
+        s+=to_string(root->val);
+        if(!root->left && !root->right)
+        {
+            int temp=stoi(s);
+            ans+=temp;
+        }
+        help(root->left,s);
+        help(root->right,s);
+        s.pop_back();
+    }
+
+    int sumNumbers(TreeNode* root) {
+        help(root,"");
+        return ans;
+    }
+};
+
+//Method2
+class Solution {
+public:
+
+    void help(TreeNode* root, int &ans, int sum)
+    {
+        if(!root)
+            return ;
+        sum=sum*10+root->val;
+        if(!root->left && !root->right)
+        {
+            ans+=sum;
+        }
+        help(root->left,ans,sum);
+        help(root->right,ans,sum);
+    }
+
+    int sumNumbers(TreeNode* root) 
+    {
+        int ans=0;
+        help(root,ans,0);
+        return ans;
+    }
+};

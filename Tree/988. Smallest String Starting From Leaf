@@ -1,0 +1,60 @@
+//solution 1
+class Solution {
+public:
+    void help(TreeNode* root, vector<string> &arr, string s)
+    {
+        if(!root)
+            return;
+        s.push_back('a'+root->val);
+        if(!root->left && !root->right)
+        {
+            string str = s;
+            reverse(str.begin(),str.end());
+            arr.push_back(str);
+            return;
+        }
+        help(root->left,arr,s);
+        help(root->right,arr,s);
+        s.pop_back();
+    }
+
+    string smallestFromLeaf(TreeNode* root) {
+        vector<string> arr;
+        help(root,arr,"");
+        sort(arr.begin(),arr.end());
+        return arr[0];
+    }
+};
+
+
+//solution 2
+class Solution {
+public:
+    void help(TreeNode* root, string &ans, string s)
+    {
+        s.push_back('a'+root->val);
+        if(!root->left && !root->right)
+        {
+            string str = s;
+            reverse(str.begin(),str.end());
+            if(ans=="")
+                ans=str;
+            else{
+                if(str<ans)
+                    ans=str;
+            }
+            return;
+        }
+        if(root->left)
+            help(root->left,ans,s);
+        if(root->right)
+            help(root->right,ans,s);
+        s.pop_back();
+    }
+
+    string smallestFromLeaf(TreeNode* root) {
+        string ans="";
+        help(root,ans,"");
+        return ans;
+    }
+};

@@ -1,0 +1,50 @@
+class Solution {
+public:
+    void help(queue<string> &q, unordered_set<string> &st, string &cur)
+    {
+        for(int i = 0; i<4; i++) 
+        {
+            char ch  = cur[i];
+
+            char dec = ch=='0' ? '9' : ch-1;
+            char inc = ch=='9' ? '0' : ch+1;
+
+            cur[i]  = dec;
+            if(!st.count(cur)) {
+                st.insert(cur);
+                q.push(cur);
+            }
+
+            cur[i] = inc;
+            if(!st.count(cur)) {
+                st.insert(cur);
+                q.push(cur);
+            }
+            cur[i] = ch;
+        }
+    }
+
+    int openLock(vector<string>& deadends, string target) {
+        unordered_set<string> st(begin(deadends),end(deadends));
+        string start="0000";
+        if(st.find(start)!=st.end())
+            return -1;
+        int level=0;
+        queue<string> q;
+        q.push(start);
+        while(!q.empty())
+        {
+            int n=q.size();
+            while(n--)
+            {
+                string cur=q.front();
+                q.pop();
+                if(cur==target)
+                    return level;
+                help(q,st,cur);
+            }
+            level++;
+        }
+        return -1;
+    }
+};

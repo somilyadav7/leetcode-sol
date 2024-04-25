@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int longestIdealString(string s, int k) {
+        int n=s.length();
+        vector<int> temp(26,0);
+        int ans=INT_MIN;
+        for(int i=0; i<n; i++)
+        {
+            int cur = s[i]-'a';
+            int left = max(0,cur-k);
+            int right = min(25,cur+k);
+            int maxi=0;
+            for(int j=left; j<=right; j++)
+            {
+                maxi=max(maxi,temp[j]);
+            }
+            temp[cur]=max(temp[cur],maxi+1);
+            ans=max(ans,temp[cur]);
+        }
+        return ans;
+    }
+};

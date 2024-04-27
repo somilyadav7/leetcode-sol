@@ -1,13 +1,13 @@
 class Solution {
 public:
-    int countSteps(int rindex, int idx, string ring)
+    int countSteps(int rindex, int idx, string &ring)
     {
         int distance = abs(idx-rindex);
         int wraparound = ring.length()-distance;
         return min(distance,wraparound);
     }
 
-    int solve(int rindex, int kindex, string ring, string key, vector<vector<int>> &dp)
+    int solve(int rindex, int kindex, string &ring, string &key, vector<vector<int>> &dp)
     {
         if(kindex>=key.length())
             return 0;
@@ -29,7 +29,7 @@ public:
     int findRotateSteps(string ring, string key) {
         int n=ring.length();
         int m=key.length();
-        vector<vector<int>> dp(n,vector<int>(m,-1));
+        vector<vector<int>> dp(n+1,vector<int>(m+1,-1));
         return solve(0,0,ring,key,dp);
     }
 };

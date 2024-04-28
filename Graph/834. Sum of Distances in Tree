@@ -1,0 +1,46 @@
+class Solution {
+public:
+    long root_result=0;
+
+    int dfsBase(vector<int> adj[], int cur, int prev, int depth,vector<int> &count)
+    {
+        int totalCount=1;
+        root_result+=depth;
+        for(auto &child:adj[cur])
+        {
+            if(child!=prev)
+                totalCount+=dfsBase(adj,child,cur,depth+1,count);
+        }
+        count[cur]=totalCount;
+        return totalCount;
+    }
+
+    void dfs(vector<int> adj[], int cur, int prev, vector<int> &result,vector<int> &count, int n)
+    {
+        for(auto &child:adj[cur])
+        {
+            if(child!=prev)
+            {
+                result[child]=result[cur]-count[child]+(n-count[child]);
+                dfs(adj,child,cur,result,count,n);
+            }
+
+        }
+    }
+
+    vector<int> sumOfDistancesInTree(int n, vector<vector<int>>& edges) {
+        vector<int> count(n,0);
+        vector<int>adj[n];
+        for(auto &i:edges){
+            int u = i[0];
+            int v = i[1];
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+        dfsBase(adj,0,-1,0,count);
+        vector<int> result(n,0);
+        result[0]=root_result;
+        dfs(adj,0,-1, result, count, n);
+        return result;
+    }
+};

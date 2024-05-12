@@ -1,0 +1,27 @@
+class Solution {
+public:
+    vector<vector<int>> largestLocal(vector<vector<int>>& grid) {
+        int n=grid.size();
+        vector<vector<int>> ans(n-2,vector<int>(n-2,0));
+        int x=0, y=0;
+        while(x+3<=n && y+3<=n)
+        {
+            int maxi=INT_MIN;
+            for(int i=x; i<x+3; i++)
+            {
+                for(int j=y; j<y+3; j++)
+                {
+                    maxi=max(maxi,grid[i][j]);
+                }
+            }
+            ans[x][y]=maxi;
+            if(y+4<=n)
+                y++;
+            else{
+                y=0;
+                x++;
+            }
+        }
+        return ans;
+    }
+};

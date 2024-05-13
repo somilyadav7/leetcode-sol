@@ -1,0 +1,76 @@
+//Brute Force
+class Solution {
+public:
+    int matrixScore(vector<vector<int>>& grid) {
+        int n=grid.size(), m=grid[0].size();
+        vector<int> sum(m,0);
+        for(int i=0; i<n; i++)
+        {
+            if(grid[i][0]==0)
+            {
+                for(int j=0; j<m; j++)
+                {
+                    if(grid[i][j]==0)
+                        grid[i][j]=1;
+                    else
+                        grid[i][j]=0;
+                }     
+            }
+            for(int j=0; j<m; j++)
+            {
+                if(grid[i][j]==1)
+                    sum[j]++;
+            }
+        }
+        int mini;
+        if(n%2==0)
+            mini=n/2;
+        else
+            mini=(n+1)/2;
+        for(int j=1; j<m; j++)
+        {
+            for(int i=0; i<n; i++)
+            {
+                if(sum[j]<mini)
+                {
+                    if(grid[i][j]==0)
+                        grid[i][j]=1;
+                    else
+                        grid[i][j]=0;
+                }
+            }
+        }      
+        int ans=0;
+        for(int i=0; i<n; i++)
+        {
+            int power=0;
+            for(int j=m-1; j>=0; j--)
+            {
+                ans=ans+grid[i][j]*pow(2,power);
+                power++;
+            }
+        }
+        return ans;
+    }
+};
+
+
+//Optimal Approach
+class Solution {
+public:
+    int matrixScore(vector<vector<int>>& grid) {
+        int n=grid.size(), m=grid[0].size();
+        int sum = n * (1<<(m-1));
+        for(int j=1; j<m; j++)
+        {
+            int colCount=0;
+            for(int i=0; i<n; i++)
+                colCount += (grid[i][0]==0) ? grid[i][j]^1 : grid[i][j];
+            if(n-colCount>colCount)
+                sum += (n-colCount) * (1<<(m-1-j));
+            else
+                sum += colCount * (1<<(m-1-j));
+        }
+        return sum;
+    }
+};

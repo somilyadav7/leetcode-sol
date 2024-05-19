@@ -1,0 +1,43 @@
+class Solution {
+public:
+    long long maximumValueSum(vector<int>& nums, int k, vector<vector<int>>& edges) {
+        long long sum = 0;
+        int count = 0;
+        int loss = INT_MAX;
+        for(auto i:nums)
+        {
+            if((i^k)>i)
+            {
+                sum+=i^k;
+                count++;
+            }else{
+                sum+=i;
+            }
+            loss=min(loss,abs(i-(i^k)));
+        }
+        if(count%2!=0)
+            sum-=loss;
+        return sum;
+    }
+};
+
+class Solution {
+public:
+    long long maximumValueSum(vector<int>& nums, int k, vector<vector<int>>& edges) {
+        long long sum = 0;
+        vector<int> profit;
+        for(auto i:nums)
+        {
+            sum+=i;
+            profit.push_back((i^k)-i);
+        }
+        sort(begin(profit),end(profit), greater<int>());
+        for(int i=0; i<profit.size()-1; i+=2)
+        {
+            long long pairSum = profit[i] + profit[i+1];
+            if(pairSum>0)
+                sum+=pairSum;
+        }
+        return sum;
+    }
+};

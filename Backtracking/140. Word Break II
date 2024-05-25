@@ -1,0 +1,54 @@
+Given a string s and a dictionary of strings wordDict, add spaces in s to construct a sentence where each word is a valid dictionary word. Return all such possible sentences in any order.
+
+Note that the same word in the dictionary may be reused multiple times in the segmentation.
+
+ 
+
+Example 1:
+
+Input: s = "catsanddog", wordDict = ["cat","cats","and","sand","dog"]
+Output: ["cats and dog","cat sand dog"]
+Example 2:
+
+Input: s = "pineapplepenapple", wordDict = ["apple","pen","applepen","pine","pineapple"]
+Output: ["pine apple pen apple","pineapple pen apple","pine applepen apple"]
+Explanation: Note that you are allowed to reuse a dictionary word.
+Example 3:
+
+Input: s = "catsandog", wordDict = ["cats","dog","sand","and","cat"]
+Output: []
+
+class Solution {
+public:
+    void help(int idx, string &s, string &cur, unordered_set<string> &st, vector<string> &ans)
+    {
+        if(idx>=s.length())
+        {
+            ans.push_back(cur);
+            return;
+        }
+        for(int j=idx; j<s.length(); j++)
+        {
+            string str = s.substr(idx,j-idx+1);
+            if(st.find(str)!=st.end())
+            {
+                string temp = cur;
+                if(!cur.empty())
+                    cur+=" ";
+                cur+=str;
+                help(j+1,s,cur,st,ans);
+                cur=temp;
+            }
+        }
+    }
+
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+        string cur="";
+        vector<string> ans;
+        unordered_set<string> st;
+        for(auto i:wordDict)
+            st.insert(i);
+        help(0,s,cur,st,ans);
+        return ans;
+    }
+};

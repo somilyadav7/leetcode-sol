@@ -1,0 +1,79 @@
+You are given a string s that consists of lower case English letters and brackets.
+Reverse the strings in each pair of matching parentheses, starting from the innermost one.
+Your result should not contain any brackets.
+
+Example 1:
+Input: s = "(abcd)"
+Output: "dcba"
+
+Example 2:
+Input: s = "(u(love)i)"
+Output: "iloveu"
+Explanation: The substring "love" is reversed first, then the whole string is reversed.
+
+Example 3:
+Input: s = "(ed(et(oc))el)"
+Output: "leetcode"
+Explanation: First, we reverse the substring "oc", then "etco", and finally, the whole string.
+
+class Solution {
+public:
+    string reverseParentheses(string s) {
+        stack<int> st;
+        int n=s.size();
+        string result;
+        for(int i=0; i<n; i++)
+        {
+            if(s[i]=='(')
+                st.push(result.length());
+            else if(s[i]==')')
+            {
+                int l=st.top();
+                st.pop();
+                reverse(result.begin()+l,result.end());
+            }
+            else{
+                result.push_back(s[i]);
+            }
+        }
+        return result;
+    }
+};
+
+
+Warmhole Teleportation
+
+class Solution {
+public:
+    string reverseParentheses(string s) {
+        int n=s.length();
+        stack<int> st;
+        vector<int> door(n);
+        for(int i=0; i<n; i++)
+        {
+            if(s[i]=='(')
+                st.push(i);
+            else if(s[i]==')')
+            {
+                int j=st.top();
+                st.pop();
+                door[i]=j;
+                door[j]=i;
+            }
+        }
+
+        string result;
+        int flag=1;
+        for(int i=0; i<n; i+=flag)
+        {
+            if(s[i]=='(' || s[i]==')')
+            {
+                i=door[i];
+                flag = -flag;
+            }
+            else
+                result.push_back(s[i]);
+        }
+        return result;
+    }
+};

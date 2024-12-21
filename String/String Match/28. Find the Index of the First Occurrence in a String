@@ -1,0 +1,71 @@
+**Brute Force Rabin Karp Method**
+
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        int n=haystack.length(), m=needle.length();
+        if(m>n)
+            return -1;
+        if(m==n)
+            return (haystack==needle)?0:-1;
+        long long int text=0;
+        int i=0, j=m-1;
+        while(i<m)
+        {
+            int rem=needle[i]-'a';
+            text=text+rem*pow(2,j);
+            i++;
+            j--;
+        }
+        for(int i=0; i<=n-m; i++)
+        {
+            long long int temp=0;
+            int k=0, j=m-1;
+            while(k<m)
+            {
+                int rem=haystack[i+k]-'a';
+                temp=temp+rem*pow(2,j);
+                k++;
+                j--;
+            }     
+            if(temp==text)
+                return i;       
+        }
+        return -1;
+    }
+};
+
+
+
+**Optimized Chatgpt code**
+**Rolling hash**
+int strStr(string haystack, string needle) {
+    int n = haystack.length(), m = needle.length();
+    if (m > n) return -1;
+    if (m == 0) return 0;
+
+    const int base = 2; // Base for hash computation
+    const int mod = 1e9 + 7; // A large prime number for modulo
+
+    long long needleHash = 0, haystackHash = 0, power = 1;
+
+    // Compute the hash of the needle and the first substring of haystack
+    for (int i = 0; i < m; i++) {
+        needleHash = (needleHash * base + (needle[i] - 'a')) % mod;
+        haystackHash = (haystackHash * base + (haystack[i] - 'a')) % mod;
+        if (i < m - 1) power = (power * base) % mod; // Precompute base^(m-1)
+    }
+
+    // Sliding window to compare hashes
+    for (int i = 0; i <= n - m; i++) {
+        if (needleHash == haystackHash) {
+            if (haystack.substr(i, m) == needle) return i; // Verify match
+        }
+        if (i < n - m) {
+            // Update the hash for the next window
+            haystackHash = (haystackHash - (haystack[i] - 'a') * power % mod + mod) % mod;
+            haystackHash = (haystackHash * base + (haystack[i + m] - 'a')) % mod;
+        }
+    }
+    return -1;
+}
